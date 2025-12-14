@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>עוזר מכירות פיננסי – LIVE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top, #e0f2fe 0, #f8fafc 40%, #f1f5f9 100%);
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --bot-bg: #ecfdf3;
+      --bot-border: #16a34a;
+      --text-main: #0f172a;
+      --text-soft: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .shell {
+      max-width: 900px;
+      width: 100%;
+      padding: 16px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .container {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+      display: flex;
+      flex-direction: column;
+      height: 75vh;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    .header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      background: linear-gradient(to left, #0f172a, #1e293b);
+      color: #f9fafb;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #60a5fa, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .header-text-main {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .header-text-sub {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 16px 18px;
+      overflow-y: auto;
+      background: linear-gradient(to bottom, #f8fafc 0, #ffffff 40%);
+    }
+
+    .msg {
+      margin: 10px 0;
+      padding: 10px 14px;
+      border-radius: 16px;
+      max-width: 80%;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .me {
+      background: var(--accent-soft);
+      margin-left: auto;
+      border-bottom-left-radius: 4px;
+    }
+
+    .bot {
+      background: var(--bot-bg);
+      margin-right: auto;
+      border-right: 3px solid var(--bot-border);
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-label {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 2px;
+    }
+
+    .input-area {
+      border-top: 1px solid #e2e8f0;
+      padding: 10px 10px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hint-row {
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip:hover {
+      background: #d1d5db;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 999px;
+      border: 1px solid #cbd5f5;
+      outline: none;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .input-row input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+    }
+
+    .input-row button {
+      padding: 0 18px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, transform 0.07s ease;
+    }
+
+    .input-row button:active {
+      transform: scale(0.97);
+    }
+
+    .input-row button:hover {
+      background: #1d4ed8;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error {
+      text-align: center;
+      color: #b91c1c;
+      font-size: 12px;
+      min-height: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        height: 80vh;
+      }
+      .shell {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="title">עוזר מכירות פיננסי – בזמן אמת</div>
+    <div class="subtitle">כותבים מה הלקוח אמר &rarr; מקבלים תשובת חיזוק חכמה וקצרה בסגנון ניר דובדבני.</div>
+
+    <div class="container">
+      <div class="header">
+        <div class="header-icon">₪</div>
+        <div>
+          <div class="header-text-main">עוזר מכירות חכם</div>
+          <div class="header-text-sub">ממוקד ערך לטווח ארוך · עד שני משפטים לכל תגובה</div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages"></div>
+
+      <div class="input-area">
+        <div class="hint-row">
+          <span>דוגמה: "הלקוח אומר שזה יקר / שאין לו זמן / שהוא מעדיף לחכות".</span>
+          <div class="chips">
+            <button class="chip" onclick="quickFill('הלקוח אומר שזה יקר מדי כרגע')">אמר שזה יקר</button>
+            <button class="chip" onclick="quickFill('הלקוח אומר שאין לו זמן להתעסק בזה עכשיו')">אין זמן</button>
+            <button class="chip" onclick="quickFill('הלקוח אומר שהוא מעדיף לחכות עם זה עוד שנה')">אומר לחכות</button>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input type="text" id="userInput" placeholder="מה הלקוח אמר?..." />
+          <button id="sendBtn" onclick="sendToBot()">
+            <span id="sendText">שלח</span>
+            <span id="sendSpinner" class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+
+        <div class="error" id="error"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('userInput');
+    const errorEl = document.getElementById('error');
+    const sendBtn = document.getElementById('sendBtn');
+    const sendText = document.getElementById('sendText');
+    const sendSpinner = document.getElementById('sendSpinner');
+
+    function addMessage(text, type) {
+      const wrapper = document.createElement('div');
+      const label = document.createElement('div');
+      const bubble = document.createElement('div');
+
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.alignItems = type === 'me' ? 'flex-end' : 'flex-start';
+
+      label.className = 'msg-label';
+      label.textContent = type === 'me' ? 'נציג' : 'עוזר מכירות';
+
+      bubble.className = 'msg ' + type;
+      bubble.textContent = text;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(bubble);
+      messagesEl.appendChild(wrapper);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function setLoading(isLoading) {
+      if (isLoading) {
+        sendText.textContent = 'חושב...';
+        sendSpinner.style.display = 'inline-block';
+        sendBtn.disabled = true;
+      } else {
+        sendText.textContent = 'שלח';
+        sendSpinner.style.display = 'none';
+        sendBtn.disabled = false;
+      }
+    }
+
+    async function sendToBot() {
+      const txt = inputEl.value.trim();
+      if (!txt) return;
+
+      errorEl.textContent = '';
+      addMessage(txt, 'me');
+      inputEl.value = '';
+      inputEl.focus();
+
+      setLoading(true);
+
+      try {
+        const res = await fetch('/api/salesbot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: txt })
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || ('שגיאה מהשרת: ' + res.status));
+        }
+
+        const data = await res.json();
+        const reply = data.reply || 'לא התקבלה תשובה.';
+        addMessage(reply, 'bot');
+      } catch (err) {
+        console.error(err);
+        errorEl.textContent = err.message || 'אירעה שגיאה כללית.';
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function quickFill(templateText) {
+      inputEl.value = templateText;
+      inputEl.focus();
+    }
+
+    inputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendToBot();
+    });
+  </script>
+</body>
+</html>
