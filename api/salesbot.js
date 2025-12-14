@@ -1,65 +1,30 @@
-// api/salesbot.js
+import OpenAI from "openai";
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export default async function handler(req, res) {
   try {
-    const { text } = req.body || {};
-
-    if (!text || typeof text !== 'string') {
-      return res.status(400).json({ error: 'Missing text field in body' });
-    }
-
-    // לוג בסיסי – מה הלקוח אמר
-    console.log('📝 NEW ENTRY:', {
-      time: new Date().toISOString(),
-      customerText: text.slice(0, 200)
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const prompt = `
-הלקוח אמר: "${text}"
+    const { text } = req.body;
 
-נסח תגובת נציג מקצועית וקצרה מאוד (עד שני משפטים),
-בסגנון מכירה של ניר דובדבני:
-ברור, חד, לא לוחץ,
-מבליט את היתרון הפיננסי לטווח ארוך למרות אי הנוחות הרגעית.
-כתוב בעברית תקינה ובטון בטוח ורגוע.
-    `;
-
-    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: 80,
-        temperature: 0.8
-      })
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "אתה עוזר מכירות בסגנון ניר דובדבני. תן תשובה קצרה, מחודדת, 1–2 משפטים בלבד.",
+        },
+        { role: "user", content: text },
+      ],
     });
 
-    if (!openaiRes.ok) {
-      const errText = await openaiRes.text();
-      console.error('OpenAI error:', openaiRes.status, errText);
-      return res.status(500).json({ error: 'OpenAI request failed', detail: errText });
-    }
-
-    const data = await openaiRes.json();
-    const reply = data.choices?.[0]?.message?.content?.trim() || '';
-
-    // לוג גם של התגובה
-    console.log('✅ BOT REPLY:', {
-      time: new Date().toISOString(),
-      reply: reply.slice(0, 200)
-    });
+    const reply = completion.choices[0].message.content;
 
     res.status(200).json({ reply });
-  } catch (err) {
-    console.error('Server error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+  } catch (error) {
+    console.error("API Error:", error);
+    res.status(500).json({ error: "OpenAI request failed" });
   }
-};
+}
