@@ -1,8 +1,6 @@
 {
-  "name": "sales-assistant-miri",
-  "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "openai": "4.20.1"
+    "openai": "^4.0.0"
   }
 }
